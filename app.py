@@ -30,12 +30,23 @@ def home():
     bus_map.add_child(Marker(location=latlng, popup=loc.address, icon = folium.Icon(color = 'blue')))
     df = bus_pos_extract()
     for i in range(df.shape[0]):
-        folium.features.RegularPolygonMarker(location = [df['bus_coordinate'][i][0], df['bus_coordinate'][i][1]],
-                                            # popup = 'Route %s to %s' % (df['RouteID'], df['TripHeadsign']),
-                                            number_of_sides = 3,
-                                            radius = 10,
-                                            weight = 1,
-                                            fill_opacity = 0.8).add_to(bus_map)
+        if df['is_bus_impacted'][i] == 'False':
+            folium.features.RegularPolygonMarker(location = [df['bus_coordinate'][i][0], df['bus_coordinate'][i][1]],
+                                                # popup = 'Route %s to %s' % (df['RouteID'], df['TripHeadsign']),
+                                                fill_color='#38b516',
+                                                number_of_sides = 10,
+                                                radius = 3,
+                                                weight = 1,
+                                                fill_opacity = 0.8).add_to(bus_map)
+        else :
+            folium.features.RegularPolygonMarker(location = [df['bus_coordinate'][i][0], df['bus_coordinate'][i][1]],
+                                                # popup = 'Route %s to %s' % (df['RouteID'], df['TripHeadsign']),
+                                                number_of_sides = 3,
+                                                fill_color='#eb0202',
+                                                radius = 8,
+                                                weight = 1,
+                                                fill_opacity = 0.8).add_to(bus_map)
+        
     return bus_map._repr_html_()
 
 if __name__ == "__main__":
